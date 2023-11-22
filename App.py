@@ -66,13 +66,22 @@ def encrypt():
         messagebox.showerror("Error", f"An error occurred during encryption: {e}")
 
 def main_screen():
+    try:
+        # Check if a display is available
+        if os.environ.get("DISPLAY") is None:
+            raise Exception("No display available. Tkinter requires a graphical environment.")
 
-    global screen
-    global code
-    global text1
+        global screen
+        global code
+        global text1
 
-    screen=Tk()
-    screen.geometry("375x398")
+        screen = Tk()
+        screen.geometry("375x398")
+
+       
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
 
     screen.title("HowsApp")
 
