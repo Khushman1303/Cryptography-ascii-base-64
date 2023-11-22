@@ -3,6 +3,10 @@ import streamlit as st
 from tkinter import *
 from tkinter import messagebox
 import base64
+import os
+
+# Define screen as a global variable
+screen = None
 
 def decrypt():
     password = code.get()
@@ -33,7 +37,6 @@ def decrypt():
 
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred during decryption: {e}")
-
 
 def encrypt():
     password = code.get()
@@ -66,43 +69,41 @@ def encrypt():
         messagebox.showerror("Error", f"An error occurred during encryption: {e}")
 
 def main_screen():
+    global screen  # Define screen as a global variable
+    global code
+    global text1
+
     try:
         # Check if a display is available
         if os.environ.get("DISPLAY") is None:
             raise Exception("No display available. Tkinter requires a graphical environment.")
 
-        global screen
-        global code
-        global text1
-
         screen = Tk()
         screen.geometry("375x398")
 
-       
+        screen.title("HowsApp")
+
+        def reset():
+            code.set("")
+            text1.delete(1.0, END)
+
+        text1 = Text(font="Robote 15", bg="white", relief=GROOVE, wrap=WORD, bd=0)
+        text1.place(x=10, y=30, width=355, height=100)
+        Label(text="Enter text for encryption and decryption:", fg="black", font=("calbri", 12)).place(x=10, y=10)
+
+        Label(text="Enter secret key for encryption and decryption:", fg="black", font=("calbri", 12)).place(x=10, y=170)
+
+        code = StringVar()
+        Entry(textvariable=code, width=19, bd=0, font=("arial", 25), show="*").place(x=10, y=200)
+
+        Button(text="ENCRYPT", height="2", width=23, bg="#ed3833", fg="white", bd=0, command=encrypt).place(x=10, y=250)
+        Button(text="DECRYPT", height="2", width=23, bg="#00bd56", fg="white", bd=0, command=decrypt).place(x=200, y=250)
+        Button(text="RESET", height="2", width=50, bg="#1089ff", fg="white", bd=0, command=reset).place(x=10, y=300)
+
+        screen.mainloop()
+
     except Exception as e:
         print(f"An error occurred: {e}")
 
-
-    screen.title("HowsApp")
-
-    def reset():
-        code.set("")
-        text1.delete(1.0,END)
-
-
-    text1=Text(font="Robote 15",bg="white",relief=GROOVE,wrap=WORD,bd=0)
-    text1.place(x=10,y=30,width=355,height=100)
-    Label(text="Enter text for encryption and decryption:",fg="black",font=("calbri",12)).place(x=10,y=10)
-
-    Label(text="Enter secret key for encryption and decryption:",fg="black",font=("calbri",12)).place(x=10,y=170)
-
-    code=StringVar()
-    Entry(textvariable=code,width=19,bd=0,font=("arial",25),show="*").place(x=10,y=200)
-
-    Button(text="ENCRYPT",height="2",width=23,bg="#ed3833",fg="white",bd=0,command=encrypt).place(x=10,y=250)
-    Button(text="DECRYPT",height="2",width=23,bg="#00bd56",fg="white",bd=0,command=decrypt).place(x=200,y=250)
-    Button(text="RESET",height="2",width=50,bg="#1089ff",fg="white",bd=0,command=reset).place(x=10,y=300)
-    
-    screen.mainloop()
-
 main_screen()
+
